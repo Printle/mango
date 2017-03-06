@@ -1,1 +1,74 @@
 /* This file is for your main application css. */
+
+body {
+  font-family: sans-serif;
+  background-color: #3F51B5;
+  height: 100vh;
+  color: #333;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  background-color: #EDEDED;
+  /*padding: 2em;*/
+}
+
+main > .block {
+  /*text-align: center;*/
+  padding: 2em 2em 0 2em;
+}
+
+main .table {
+  text-align: left;
+  margin: 2em 0;
+}
+
+main > .block:last-child {
+  padding-bottom: 2em;
+}
+
+main > .block h2 {
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.genimg {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.todo-list {
+  text-decoration: none;
+  list-style: none;
+  padding: 0;
+}
+
+.todo-list__item {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: .5em;
+}
+
+.todo-list__item:hover {
+  background-color: #EFF7FF;
+}
+
+a {
+  color: #EE8D2C;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

@@ -19,3 +19,12 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+Array.from(document.querySelectorAll('.genimg[data-str]'))
+  .forEach(ele => {
+    const str = ele.dataset.str + 'spam'
+    const canvas = document.createElement('canvas')
+    canvas.dataset['jdenticonHash'] = md5(str)
+    canvas.height = canvas.width = ele.width || 50
+    ele.appendChild(canvas)
+  })

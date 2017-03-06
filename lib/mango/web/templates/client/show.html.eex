@@ -1,0 +1,35 @@
+<div class="block">
+  <h2>
+    <div class="genimg" data-str='<%= @client.id %>'></div>
+    <%= @client.name %>
+  </h2>
+
+  <ul>
+
+    <li>
+      <strong>Email:</strong>
+      <%= @client.email %>
+    </li>
+
+    <li>
+      <strong>Note:</strong>
+      <%= @client.note %>
+    </li>
+
+  </ul>
+
+  <h3>Todos</h3>
+
+  <ol>
+    <%= for todo <- @todos do %>
+      <li>
+        <a href='<%= todo_path(@conn, :show, todo) %>'><%= todo.body %></a>
+      </li>
+    <% end %>
+  </ol>
+
+  <p><a href='<%= todo_path(@conn, :new, client: @client.id) %>'>Opret todo</a></p>
+
+  <span><%= link "Edit", to: client_path(@conn, :edit, @client) %></span>
+  <span><%= link "Back", to: client_path(@conn, :index) %></span>
+</div>
