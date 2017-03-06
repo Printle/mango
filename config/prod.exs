@@ -15,7 +15,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :mango, Mango.Web.Endpoint,
   http: [port: {:system, "PORT"}],
-  on_init: {Demo.Web.Endpoint, :load_from_system_env, []},
+  on_init: {Mango.Web.Endpoint, :load_from_system_env, []},
   url: [scheme: "https", host: "lit-scrubland-64678.herokuapp.com", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: System.get_env("SECRET_KEY_BASE")
