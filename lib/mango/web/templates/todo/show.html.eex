@@ -15,15 +15,10 @@
       <%= @todo.status %>
     </li>
 
-    <li>
-      <strong>Priority:</strong>
-      <%= @todo.priority %>
-    </li>
-
     <%= if @todo.due_date do %>
       <li>
         <strong>Due date:</strong>
-        <%= @todo.due_date %>
+        <%= format_date @todo.due_date %>
       </li>
     <%= end %>
 

@@ -3,9 +3,10 @@
   <p class="lead">Printle's management system.</p>
 </div>
 
+<%# <input type="text" name="search" placeholder="Søg" class="todo-search"> %>
 <ul class="todo-list">
   <%= for todo <- @todos do %>
-    <li class="todo-list__item">
+    <li class="todo-list-item <%= todo.status %>">
       <a href='<%= todo_path(@conn, :show, todo) %>'>
         <%= todo.body %>
       </a>

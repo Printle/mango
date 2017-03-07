@@ -18,12 +18,6 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :priority, class: "control-label" %>
-    <%= number_input f, :priority, class: "form-control" %>
-    <%= error_tag f, :priority %>
-  </div>
-
-  <div class="form-group">
     <%= label f, :due_date, class: "control-label" %>
     <%= datetime_select f, :due_date, class: "form-control" %>
     <%= error_tag f, :due_date %>

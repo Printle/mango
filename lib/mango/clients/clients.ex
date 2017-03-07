@@ -124,7 +124,7 @@ defmodule Mango.Clients do
 
   """
   def list_todos do
-    Repo.all from t in Todo, preload: :client
+    Repo.all from t in Todo, order_by: [:status, :due_date], preload: :client
   end
 
   @doc """

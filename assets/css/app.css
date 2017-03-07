@@ -1,8 +1,11 @@
 /* This file is for your main application css. */
+* {
+  box-sizing: border-box;
+}
 
 body {
-  font-family: sans-serif;
-  background-color: #3F51B5;
+  font-family: Helvertica, sans-serif;
+  background-color: #009688;
   height: 100vh;
   color: #333;
 }
@@ -16,7 +19,8 @@ body {
 }
 
 main {
-  background-color: #EDEDED;
+  background-color: #FFF;
+  min-width: 300px;
   /*padding: 2em;*/
 }
 
@@ -39,6 +43,9 @@ main > .block h2 {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: .5em;
+  margin-bottom: .5em;
 }
 
 .genimg {
@@ -47,20 +54,39 @@ main > .block h2 {
   display: inline-block;
 }
 
+.todo-search {
+  padding: 1em 2em;
+  border-left: none;
+  border-right: none;
+}
+
 .todo-list {
   text-decoration: none;
   list-style: none;
   padding: 0;
+  margin: 0;
+  margin-bottom: 1em;
 }
 
-.todo-list__item {
+.todo-list-item {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  padding: .5em;
+  padding: .2em 2em;
+  border-bottom: 1px solid lightgray;
 }
 
-.todo-list__item:hover {
+.todo-list-item.printing {
+  border-left: .5em solid #DE5;
+  padding-left: 1.5em;
+}
+
+.todo-list-item.completed {
+  border-left: .5em solid #4D1;
+  padding-left: 1.5em;
+}
+
+.todo-list-item:hover {
   background-color: #EFF7FF;
 }
 
@@ -71,4 +97,41 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+/* Clients */
+
+.client-list {
+  list-style: none;
+}
+
+.client-list-item {
+  display: flex;
+  align-items: center;
+}
+
+/* Inputs */
+
+input, textarea {
+  display: block;
+  width: 100%;
+  font-size: 1em;
+  padding: .5em;
+  box-sizing: border-box;
+  border: 1px solid lightgray;
+  resize: none;
+}
+
+/* Utils */
+
+.u-tal {
+  text-align: left;
+}
+
+.u-tac {
+  text-align: center;
+}
+
+.u-tar {
+  text-align: right;
 }

@@ -1,7 +1,10 @@
-<h2>Edit Client</h2>
+<div class="block">
+  <h2>Edit Client</h2>
 
-<%= render "form.html", changeset: @changeset,
-                        action: client_path(@conn, :update, @client) %>
+  <%= render "form.html", changeset: @changeset,
+                          action: client_path(@conn, :update, @client) %>
 
-<%= link "Delete", to: client_path(@conn, :delete, @client), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
-<span><%= link "Back", to: client_path(@conn, :index) %></span>
+  <%= link "Delete", to: client_path(@conn, :delete, @client), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+  <span><%= link "Back", to: client_path(@conn, :index) %></span>
+
+</div>
