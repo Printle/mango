@@ -13,7 +13,7 @@
 
   <div class="form-group">
     <%= label f, :status, class: "control-label" %>
-    <%= select f, :status, ["Venter": "waiting", "Printer": "printing", "Færdig": "completed"], class: "form-control" %>
+    <%= select f, :status, ["Venter": "waiting", "Printer": "printing", "Processing": "processing", "Færdig": "completed"], class: "form-control" %>
     <%= error_tag f, :status %>
   </div>
 
