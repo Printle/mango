@@ -25,7 +25,7 @@
 
   <div class="form-group">
     <%= label f, :price, class: "control-label" %>
-    <%= number_input f, :price, class: "form-control" %>
+    <%= number_input f, :price, class: "form-control", max: 2147483647 %>
     <%= error_tag f, :price %>
   </div>
 

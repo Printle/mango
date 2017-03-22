@@ -11,7 +11,7 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
+import 'phoenix_html';
 
 // Import local files
 //
@@ -20,11 +20,29 @@ import "phoenix_html"
 
 // import socket from "./socket"
 
-Array.from(document.querySelectorAll('.genimg[data-str]'))
-  .forEach(ele => {
-    const str = ele.dataset.str + 'spam'
-    const canvas = document.createElement('canvas')
-    canvas.dataset['jdenticonHash'] = md5(str)
-    canvas.height = canvas.width = ele.width || 50
-    ele.appendChild(canvas)
-  })
+Array.from(document.querySelectorAll('.genimg[data-str]')).forEach(ele => {
+  const str = ele.dataset.str + 'spam';
+  const canvas = document.createElement('canvas');
+  canvas.dataset['jdenticonHash'] = md5(str);
+  canvas.height = (canvas.width = ele.width || 50);
+  ele.appendChild(canvas);
+});
+
+Array.from(document.querySelectorAll('.todo-search')).map(input => {
+  input.addEventListener('input', e => {
+    const query = input.value;
+
+    Array.from(document.querySelectorAll('.todo-list-item')).map(item => {
+      const text = item.dataset.body;
+      const isMatch = text.toLowerCase().indexOf(query.toLowerCase()) > -1;
+
+      console.log(query, text, isMatch);
+
+      if (isMatch) {
+        item.classList.remove('not-match');
+      } else {
+        item.classList.add('not-match');
+      }
+    });
+  });
+});

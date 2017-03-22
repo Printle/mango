@@ -76,14 +76,29 @@ main > .block h2 {
   border-bottom: 1px solid lightgray;
 }
 
+.todo-list-item.not-match {
+  display: none;
+}
+
+.todo-list-item.waiting {
+  border-left: .5em solid #F44336;
+  padding-left: 1.5em;
+}
+
 .todo-list-item.printing {
   border-left: .5em solid #DE5;
+  padding-left: 1.5em;
+}
+
+.todo-list-item.processing {
+  border-left: .5em solid #1c3de0;
   padding-left: 1.5em;
 }
 
 .todo-list-item.completed {
   border-left: .5em solid #4D1;
   padding-left: 1.5em;
+  opacity: 0.3;
 }
 
 .todo-list-item:hover {

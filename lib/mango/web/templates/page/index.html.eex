@@ -3,10 +3,14 @@
   <p class="lead">Printle's management system.</p>
 </div>
 
-<%# <input type="text" name="search" placeholder="Søg" class="todo-search"> %>
+<div class="block">
+  <a href='<%= client_path(@conn, :index) %>'>Gå til klient administration</a>
+</div>
+
+<input type="text" name="search" placeholder="Søg" class="todo-search">
 <ul class="todo-list">
   <%= for todo <- @todos do %>
-    <li class="todo-list-item <%= todo.status %>">
+    <li class="todo-list-item <%= todo.status %>" data-body="<%= todo.body %>">
       <a href='<%= todo_path(@conn, :show, todo) %>'>
         <%= todo.body %>
       </a>
@@ -16,7 +20,3 @@
     </li>
   <% end %>
 </ul>
-
-<div class="block">
-  <a href='<%= client_path(@conn, :index) %>'>Gå til klient administration</a>
-</div>

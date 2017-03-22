@@ -123,8 +123,19 @@ defmodule Mango.Clients do
       [%Todo{}, ...]
 
   """
-  def list_todos do
-    Repo.all from t in Todo, order_by: [:status, :due_date], preload: :client
+  def list_todos(opts \\ %{}) do
+    query = from t in Todo, order_by: [:status, :due_date], preload: :client
+
+    opts = %{show_completed: false} |> Map.merge(opts)
+
+    IO.puts opts.show_completed
+
+    if !opts.show_completed do
+      from t in query, where: t.status != ^"completed"
+    else
+      query
+    end
+    |> Repo.all
   end
 
   @doc """
