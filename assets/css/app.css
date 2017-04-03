@@ -6,7 +6,7 @@
 body {
   font-family: Helvertica, sans-serif;
   background-color: #009688;
-  height: 100vh;
+  min-height: 100vh;
   color: #333;
 }
 
@@ -14,7 +14,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   flex-direction: column;
 }
 
