@@ -1,8 +1,0 @@
-<div class="block">
-  <h2>Opret ny klient</h2>
-
-  <%= render "form.html", changeset: @changeset,
-                          action: client_path(@conn, :create) %>
-
-  <span><%= link "Back", to: client_path(@conn, :index) %></span>
-</div>
