@@ -2,6 +2,8 @@ import 'tachyons'
 import './index.css'
 import 'milligram'
 
+import * as React from 'react'
+
 import {
   ApolloClient,
   ApolloProvider,
@@ -14,15 +16,12 @@ import { Clients } from './components/Clients'
 import { CreateClient } from './components/CreateClient'
 import { CreateJob } from './components/CreateJob'
 import { CreateModel } from './components/CreateModel'
-import CreatePage from './components/CreatePage'
 import { Dashboard } from './components/Dashboard'
-import DetailPage from './components/DetailPage'
 import { Jobs } from './components/Jobs'
 import { Models } from './components/Models'
 import { Printers } from './components/Printers'
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { SimpleNav } from './components/SimpleNav'
+import { render } from 'react-dom'
 import styled from 'styled-components'
 
 const networkInterface = createNetworkInterface({
@@ -43,7 +42,7 @@ const Page = styled.div`
   }
 `
 
-ReactDOM.render(
+render(
   <ApolloProvider client={client}>
     <Router>
       <Page>

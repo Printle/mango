@@ -1,8 +1,8 @@
+import * as React from 'react'
+
 import { compose, gql, graphql } from 'react-apollo'
 
-import React from 'react'
 import styled from 'styled-components'
-import { withRouter } from 'react-router-dom'
 
 const createJobMutation = gql`
   mutation createPrintJob($clientId: ID!, $modelId: ID!, $printerId: ID!) {
@@ -48,15 +48,16 @@ export const CreateJob = compose(
   graphql(createJobMutation, { name: 'createJob' }),
   graphql(createJobQuery, { name: 'query' }),
 )(props => {
-  const { mutate, query, loading, createJob } = props
+  const { query, createJob } = props
 
   return (
     <Form
       onSubmit={async e => {
         e.preventDefault()
-        const client = e.target.client.value
-        const printer = e.target.printer.value
-        const model = e.target.model.value
+        const t = e.target
+        const client = t.client.value
+        const printer = t.printer.value
+        const model = t.model.value
         const variables = {
           clientId: client,
           modelId: model,

@@ -1,9 +1,9 @@
+import * as React from 'react'
+
 import { gql, graphql } from 'react-apollo'
 
 import { DurationInput } from './DurationInput'
-import React from 'react'
 import styled from 'styled-components'
-import { withRouter } from 'react-router-dom'
 
 const createModelMutation = gql`
   mutation createModel($duration: Int!, $name: String!) {
@@ -27,8 +27,10 @@ export const CreateModel = graphql(createModelMutation)(({ mutate }) => (
   <Form
     onSubmit={async e => {
       e.preventDefault()
-      const name = e.target.name.value
-      const duration = parseInt(e.target.duration.value, 0)
+      const target = e.target
+
+      const name = target.name.value
+      const duration = parseInt(target.duration.value, 0)
       await mutate({ variables: { name, duration } })
       window.location.pathname = '/models'
     }}

@@ -1,8 +1,9 @@
+import * as React from 'react'
+
 import { DurationInput, extractParts } from './DurationInput'
-import { Link, withRouter } from 'react-router-dom'
 import { gql, graphql } from 'react-apollo'
 
-import React from 'react'
+import { Link } from 'react-router-dom'
 import { Table } from './Table'
 import { compose } from 'react-apollo'
 import styled from 'styled-components'
@@ -229,23 +230,11 @@ const ModelsGrid = graphql(
   </div>
 ))
 
-const Model = compose(
-  graphql(updateModelMutation, { name: 'updateModel' }),
-  graphql(removePrinterSupportMutation, { name: 'removePrinterSupport' }),
-  graphql(supportPrinterMutation, { name: 'supportPrinter' }),
-)(styled(RawModel)`
-  background: white;
-  padding: 1em;
-  margin: 1em;
-  box-shadow: 0 0.2em 0.5em 0 rgba(0, 0, 0, 0.2);
-  width: 22em;
-`)
-
 class RawModels extends React.Component {
   state = { search: '' }
 
   render() {
-    const { className, data } = this.props
+    const { className } = this.props
     const { search } = this.state
 
     return (
@@ -261,6 +250,18 @@ class RawModels extends React.Component {
     )
   }
 }
+
+const Model = compose(
+  graphql(updateModelMutation, { name: 'updateModel' }),
+  graphql(removePrinterSupportMutation, { name: 'removePrinterSupport' }),
+  graphql(supportPrinterMutation, { name: 'supportPrinter' }),
+)(styled(RawModel)`
+  background: white;
+  padding: 1em;
+  margin: 1em;
+  box-shadow: 0 0.2em 0.5em 0 rgba(0, 0, 0, 0.2);
+  width: 22em;
+`)
 
 export const Models = styled(RawModels)`
   display: flex;

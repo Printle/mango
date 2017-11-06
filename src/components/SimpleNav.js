@@ -1,10 +1,9 @@
-import { Link, NavLink, withRouter } from 'react-router-dom'
-import { gql, graphql } from 'react-apollo'
+import * as React from 'react'
 
-import React from 'react'
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
-const RawSimpleNav = ({ className }) => (
+const RawSimpleNav: React.SFC<{ className?: string }> = ({ className }) => (
   <nav className={className}>
     <NavLink exact to="/">
       Hjem

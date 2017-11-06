@@ -1,8 +1,8 @@
+import * as React from 'react'
+
 import { gql, graphql } from 'react-apollo'
 
-import React from 'react'
 import styled from 'styled-components'
-import { withRouter } from 'react-router-dom'
 
 const createClientMutation = gql`
   mutation createClient($name: String!) {
@@ -33,7 +33,7 @@ export const CreateClient = graphql(createClientMutation)(({ mutate }) => (
   >
     <h1>Opret Kunde</h1>
     <InputGroup>
-      <Label>Navn:</Label>
+      <Label>Navn</Label>
       <Input name="name" />
     </InputGroup>
     <InputGroup>

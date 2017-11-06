@@ -18,4 +18,4 @@ npm-debug.log
 .idea/*
 *.swp
 
-server
+server/_types.graphql

@@ -1,4 +1,5 @@
-import React from 'react'
+import * as React from 'react'
+
 import styled from 'styled-components'
 
 export const MILLI = 1
@@ -29,8 +30,9 @@ class RawDurationInput extends React.Component {
   }
 
   update = field => e => {
-    this.setState({ [field]: parseInt(e.target.value, 10) }, () =>
-      this.props.onChange(this.durationInMillis()),
+    this.setState(
+      { [field]: parseInt(e.target.value, 10) },
+      () => this.props.onChange && this.props.onChange(this.durationInMillis()),
     )
   }
 

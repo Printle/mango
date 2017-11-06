@@ -1,0 +1,61 @@
+# projectId: cj9h6x1cp37ze0111erl6ygwi
+# version: 20
+
+type Client @model {
+  id: ID! @isUnique
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  jobs: [PrintJob!]! @relation(name: "ClientPrints")
+}
+
+type Model @model {
+  id: ID! @isUnique
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  duration: Int!
+  supportedPrinters: [Printer!]! @relation(name: "SupportedModels")
+  jobs: [PrintJob!]! @relation(name: "Models")
+}
+
+enum PrintJobStatus {
+  WAITING
+  LOCKED
+  PRINTING
+  FINISHED
+  CANCELLED
+}
+
+type PrintJob @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  printer: Printer! @relation(name: "PrinterJobs")
+  client: Client! @relation(name: "ClientPrints")
+  model: Model! @relation(name: "Models")
+  scheduledTime: DateTime
+  status: PrintJobStatus! @defaultValue(value: WAITING)
+}
+
+type Printer @model {
+  id: ID! @isUnique
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  jobs: [PrintJob!]! @relation(name: "PrinterJobs")
+  supportedModels: [Model!]! @relation(name: "SupportedModels")
+}
+
+enum UserRole {
+  ADMIN
+}
+
+type User @model {
+  id: ID! @isUnique
+  name: String
+  email: String! @isUnique
+  password: String!
+  dateOfBirth: DateTime
+  role: UserRole
+}

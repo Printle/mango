@@ -1,21 +1,20 @@
-import { Link, withRouter } from 'react-router-dom'
+import * as React from 'react'
+
 import { gql, graphql } from 'react-apollo'
 
-import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-const PrintersQuery = gql`
+const UnstyledPrinters = graphql(gql`
   query printers {
     allPrinters {
       id
       name
     }
   }
-`
-
-const UnstyledPrinters = graphql(PrintersQuery)(
+`)(
   props =>
-    props.data.loading ? null : (
+    !props.data || props.data.loading ? null : (
       <div className={props.className}>
         <ul>
           {props.data.allPrinters.map(printer => (

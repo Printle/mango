@@ -1,7 +1,8 @@
-import { Link, withRouter } from 'react-router-dom'
+import * as React from 'react'
+
 import { gql, graphql } from 'react-apollo'
 
-import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const ClientsQuery = gql`

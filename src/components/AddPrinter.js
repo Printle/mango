@@ -1,16 +1,8 @@
+import * as React from 'react'
+
 import { gql, graphql } from 'react-apollo'
 
-import React from 'react'
 import styled from 'styled-components'
-import { withRouter } from 'react-router-dom'
-
-const addPrinterMutation = gql`
-  mutation addPrinter($name: String!) {
-    createPrinter(name: $name) {
-      id
-    }
-  }
-`
 
 const Form = styled.form`
   background: white;
@@ -22,10 +14,19 @@ const Label = styled.label`display: block;`
 const Input = styled.input``
 const Button = styled.button``
 
-export const AddPrinter = graphql(addPrinterMutation)(({ mutate }) => (
+export const AddPrinter = graphql(gql`
+  mutation addPrinter($name: String!) {
+    createPrinter(name: $name) {
+      id
+    }
+  }
+`)(({ mutate }) => (
   <Form
     onSubmit={async e => {
       e.preventDefault()
+
+      if (!mutate) return
+
       const name = e.target.name.value
       await mutate({ variables: { name } })
       window.location.pathname = '/printers'
@@ -33,7 +34,7 @@ export const AddPrinter = graphql(addPrinterMutation)(({ mutate }) => (
   >
     <h1>Opret Printer</h1>
     <InputGroup>
-      <Label>Navn:</Label>
+      <Label>Navn</Label>
       <Input name="name" />
     </InputGroup>
     <InputGroup>

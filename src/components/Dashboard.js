@@ -1,9 +1,7 @@
-import { Link, withRouter } from 'react-router-dom'
-import { SegmentScroller, range } from './SegmentScroller'
+import * as React from 'react'
+
 import { compose, gql, graphql } from 'react-apollo'
 
-import { DAYS } from './DurationInput'
-import React from 'react'
 import Timeline from 'react-calendar-timeline'
 import moment from 'moment'
 import styled from 'styled-components'
@@ -174,7 +172,7 @@ const SelectedJob = compose(
 )(({ job, updateJob }) => {
   if (job.loading) return <h3>Loading</h3>
 
-  const { id, status, client } = job.PrintJob
+  const { id, status } = job.PrintJob
 
   return (
     <div>
@@ -197,11 +195,6 @@ const SelectedJob = compose(
   )
 })
 
-const Scroller = styled.div`
-  flex: 1;
-  overflow: hidden;
-`
-
 export const Dashboard = compose(
   graphql(updateJobMutation, { name: 'updateJob' }),
   graphql(PrintersQuery, { name: 'printers', options: { pollInterval: 1000 } }),
@@ -214,7 +207,7 @@ export const Dashboard = compose(
 
   > div {
     width: 100%;
-    max-width: 1200px;
+    max-width: 100vw;
     display: flex;
     flex-direction: column;
   }
