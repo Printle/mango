@@ -2,8 +2,6 @@ import 'tachyons'
 import './index.css'
 import 'milligram'
 
-import * as React from 'react'
-
 import {
   ApolloClient,
   ApolloProvider,
@@ -20,6 +18,7 @@ import { Dashboard } from './components/Dashboard'
 import { Jobs } from './components/Jobs'
 import { Models } from './components/Models'
 import { Printers } from './components/Printers'
+import React from 'react'
 import { SimpleNav } from './components/SimpleNav'
 import { render } from 'react-dom'
 import styled from 'styled-components'

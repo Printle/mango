@@ -1,7 +1,6 @@
-import * as React from 'react'
-
 import { compose, gql, graphql } from 'react-apollo'
 
+import React from 'react'
 import Timeline from 'react-calendar-timeline'
 import moment from 'moment'
 import styled from 'styled-components'
@@ -14,6 +13,7 @@ const PrintersQuery = gql`
       jobs {
         id
         createdAt
+        quantity
         scheduledTime
         status
         model {
@@ -76,7 +76,7 @@ class UnstyledPrinters extends React.Component {
           canMove: job.status == 'WAITING',
           start_time: moment(job.scheduledTime || job.createdAt),
           end_time: moment(job.scheduledTime || job.createdAt).add(
-            job.model.duration,
+            job.model.duration * job.quantity,
           ),
           className:
             job.model.supportedPrinters
@@ -143,6 +143,7 @@ const SelectedJob = compose(
         PrintJob(id: $id) {
           id
           status
+          quantity
           client {
             id
             name
@@ -159,20 +160,32 @@ const SelectedJob = compose(
   ),
   graphql(
     gql`
-      mutation updatePrintJob($id: ID!, $status: PrintJobStatus!) {
+      mutation updatePrintJobStatus($id: ID!, $status: PrintJobStatus!) {
         updatePrintJob(id: $id, status: $status) {
           id
         }
       }
     `,
     {
-      name: 'updateJob',
+      name: 'updateJobStatus',
     },
   ),
-)(({ job, updateJob }) => {
+  graphql(
+    gql`
+      mutation updatePrintJobQuantity($id: ID!, $quantity: Int!) {
+        updatePrintJob(id: $id, quantity: $quantity) {
+          id
+        }
+      }
+    `,
+    {
+      name: 'updateJobQuantity',
+    },
+  ),
+)(({ job, updateJobStatus, updateJobQuantity }) => {
   if (job.loading) return <h3>Loading</h3>
 
-  const { id, status } = job.PrintJob
+  const { id, status, quantity } = job.PrintJob
 
   return (
     <div>
@@ -181,7 +194,7 @@ const SelectedJob = compose(
         value={status}
         onChange={async e => {
           const variables = { id, status: e.target.value }
-          await updateJob({ variables })
+          await updateJobStatus({ variables })
           job.refetch()
         }}
       >
@@ -191,6 +204,17 @@ const SelectedJob = compose(
           </option>
         ))}
       </select>
+      <input
+        min={1}
+        max={10}
+        type="number"
+        defaultValue={quantity}
+        onChange={async e => {
+          const variables = { id, quantity: parseInt(e.target.value, 10) }
+          await updateJobQuantity({ variables })
+          job.refetch()
+        }}
+      />
     </div>
   )
 })

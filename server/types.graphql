@@ -1,12 +1,13 @@
-# projectId: cj9h6x1cp37ze0111erl6ygwi
-# version: 20
-
 type Client @model {
   id: ID! @isUnique
   name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   jobs: [PrintJob!]! @relation(name: "ClientPrints")
+  tel: String
+  email: String
+  contactPerson: String
+  address: String
 }
 
 type Model @model {
@@ -36,6 +37,7 @@ type PrintJob @model {
   model: Model! @relation(name: "Models")
   scheduledTime: DateTime
   status: PrintJobStatus! @defaultValue(value: WAITING)
+  quantity: Int! @defaultValue(value: 1)
 }
 
 type Printer @model {

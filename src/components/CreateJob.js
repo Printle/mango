@@ -1,15 +1,20 @@
-import * as React from 'react'
-
 import { compose, gql, graphql } from 'react-apollo'
 
+import React from 'react'
 import styled from 'styled-components'
 
 const createJobMutation = gql`
-  mutation createPrintJob($clientId: ID!, $modelId: ID!, $printerId: ID!) {
+  mutation createPrintJob(
+    $clientId: ID!
+    $modelId: ID!
+    $printerId: ID!
+    $quantity: Int
+  ) {
     createPrintJob(
       clientId: $clientId
       modelId: $modelId
       printerId: $printerId
+      quantity: $quantity
     ) {
       id
     }
@@ -58,9 +63,11 @@ export const CreateJob = compose(
         const client = t.client.value
         const printer = t.printer.value
         const model = t.model.value
+        const quantity = t.quantity.value
         const variables = {
           clientId: client,
           modelId: model,
+          quantity: quantity,
           printerId: printer,
         }
         await createJob({ variables })
@@ -101,6 +108,10 @@ export const CreateJob = compose(
                 </Option>
               ))}
             </Select>
+          </InputGroup>
+          <InputGroup>
+            <Label>Antal</Label>
+            <input name="quantity" type="number" defaultValue={1} min={0} />
           </InputGroup>
           <InputGroup>
             <Button type="submit">Opret</Button>

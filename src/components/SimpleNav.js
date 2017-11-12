@@ -1,9 +1,8 @@
-import * as React from 'react'
-
 import { NavLink } from 'react-router-dom'
+import React from 'react'
 import styled from 'styled-components'
 
-const RawSimpleNav: React.SFC<{ className?: string }> = ({ className }) => (
+const RawSimpleNav = ({ className }) => (
   <nav className={className}>
     <NavLink exact to="/">
       Hjem

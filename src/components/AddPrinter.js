@@ -1,7 +1,6 @@
-import * as React from 'react'
-
 import { gql, graphql } from 'react-apollo'
 
+import React from 'react'
 import styled from 'styled-components'
 
 const Form = styled.form`

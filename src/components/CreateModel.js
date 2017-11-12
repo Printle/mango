@@ -1,8 +1,7 @@
-import * as React from 'react'
-
 import { gql, graphql } from 'react-apollo'
 
 import { DurationInput } from './DurationInput'
+import React from 'react'
 import styled from 'styled-components'
 
 const createModelMutation = gql`
