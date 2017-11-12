@@ -1,6 +1,6 @@
-import { gql, graphql } from 'react-apollo'
-
 import React from 'react'
+import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
 import styled from 'styled-components'
 
 const createClientMutation = gql`

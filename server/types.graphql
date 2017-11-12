@@ -8,6 +8,7 @@ type Client @model {
   email: String
   contactPerson: String
   address: String
+  deleted: Boolean! @defaultValue(value: false)
 }
 
 type Model @model {
@@ -18,6 +19,7 @@ type Model @model {
   duration: Int!
   supportedPrinters: [Printer!]! @relation(name: "SupportedModels")
   jobs: [PrintJob!]! @relation(name: "Models")
+  deleted: Boolean! @defaultValue(value: false)
 }
 
 enum PrintJobStatus {
@@ -36,6 +38,7 @@ type PrintJob @model {
   client: Client! @relation(name: "ClientPrints")
   model: Model! @relation(name: "Models")
   scheduledTime: DateTime
+  deadline: DateTime
   status: PrintJobStatus! @defaultValue(value: WAITING)
   quantity: Int! @defaultValue(value: 1)
 }
@@ -47,6 +50,7 @@ type Printer @model {
   updatedAt: DateTime!
   jobs: [PrintJob!]! @relation(name: "PrinterJobs")
   supportedModels: [Model!]! @relation(name: "SupportedModels")
+  deleted: Boolean! @defaultValue(value: false)
 }
 
 enum UserRole {

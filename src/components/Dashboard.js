@@ -1,7 +1,8 @@
-import { compose, gql, graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 
 import React from 'react'
 import Timeline from 'react-calendar-timeline'
+import gql from 'graphql-tag'
 import moment from 'moment'
 import styled from 'styled-components'
 

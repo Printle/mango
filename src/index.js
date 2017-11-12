@@ -2,19 +2,18 @@ import 'tachyons'
 import './index.css'
 import 'milligram'
 
-import {
-  ApolloClient,
-  ApolloProvider,
-  createNetworkInterface,
-} from 'react-apollo'
 import { Route, BrowserRouter as Router } from 'react-router-dom'
 
 import { AddPrinter } from './components/AddPrinter'
+import { ApolloClient } from 'apollo-client'
+import { ApolloProvider } from 'react-apollo'
 import { Clients } from './components/Clients'
 import { CreateClient } from './components/CreateClient'
 import { CreateJob } from './components/CreateJob'
 import { CreateModel } from './components/CreateModel'
 import { Dashboard } from './components/Dashboard'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import { Jobs } from './components/Jobs'
 import { Models } from './components/Models'
 import { Printers } from './components/Printers'
@@ -23,11 +22,14 @@ import { SimpleNav } from './components/SimpleNav'
 import { render } from 'react-dom'
 import styled from 'styled-components'
 
-const networkInterface = createNetworkInterface({
+const httpLink = new HttpLink({
   uri: 'https://api.graph.cool/simple/v1/cj9h6x1cp37ze0111erl6ygwi',
 })
 
-const client = new ApolloClient({ networkInterface })
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+})
 
 const Page = styled.div`
   min-height: 100vh;

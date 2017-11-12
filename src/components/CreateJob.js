@@ -1,6 +1,7 @@
-import { compose, gql, graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 
 import React from 'react'
+import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 const createJobMutation = gql`

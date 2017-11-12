@@ -1,10 +1,11 @@
 import { DurationInput, extractParts } from './DurationInput'
-import { gql, graphql } from 'react-apollo'
 
 import { Link } from 'react-router-dom'
 import React from 'react'
 import { Table } from './Table'
 import { compose } from 'react-apollo'
+import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
 import styled from 'styled-components'
 
 const updateModelMutation = gql`
