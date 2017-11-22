@@ -1,10 +1,10 @@
-import './index.css'
-import 'milligram'
-import 'tachyons'
+// import './index.css'
+// import 'milligram'
+// import 'tachyons'
 
 import * as React from 'react'
 
-import { Route, BrowserRouter as Router } from 'react-router-dom'
+import { Route, HashRouter as Router } from 'react-router-dom'
 
 import { AddPrinter } from './components/AddPrinter'
 import { ApolloClient } from 'apollo-client'
@@ -54,7 +54,6 @@ const client = new ApolloClient({
 })
 
 const Page = styled.div`
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 
@@ -70,7 +69,7 @@ render(
     <Router>
       <Page>
         <SimpleNav />
-        <div className="container">
+        <div>
           <Route exact path="/" component={Dashboard} />
           <Route exact path="/jobs" component={Jobs} />
           <Route path="/jobs/create" component={CreateJob} />

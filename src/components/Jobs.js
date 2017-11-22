@@ -95,7 +95,6 @@ const JobRow = ({ job }: { job: JobPageJobFragment }) => (
 const JobsContainer = styled.div`
   display: flex;
   justify-content: center;
-  min-height: 100vh;
   align-items: center;
   flex-direction: column;
 `

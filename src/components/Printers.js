@@ -15,11 +15,9 @@ const UnstyledPrinters = graphql(gql`
   props =>
     !props.data || props.data.loading ? null : (
       <div className={props.className}>
-        <ul>
-          {props.data.allPrinters.map(printer => (
-            <li key={printer.id}>{printer.name}</li>
-          ))}
-        </ul>
+        {props.data.allPrinters.map(printer => (
+          <div key={printer.id}>{printer.name}</div>
+        ))}
         <Link to="/printers/add">Tilføj printer</Link>
       </div>
     ),
@@ -28,7 +26,6 @@ const UnstyledPrinters = graphql(gql`
 export const Printers = styled(UnstyledPrinters)`
   display: flex;
   justify-content: center;
-  min-height: 100vh;
   align-items: center;
   flex-direction: column;
 `

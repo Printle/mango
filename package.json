@@ -36,8 +36,10 @@
     "tachyons": "^4.3.1"
   },
   "scripts": {
-    "start": "REACT_APP_SERVICE_ID=cj9h6x1cp37ze0111erl6ygwi react-scripts start",
-    "build": "rm -f schema.json && npm run infer && npm run flow && react-scripts build",
+    "start":
+      "REACT_APP_SERVICE_ID=cj9h6x1cp37ze0111erl6ygwi react-scripts start",
+    "build":
+      "rm -f schema.json && npm run infer && npm run flow && react-scripts build && node remove-hashes.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow",

@@ -260,6 +260,7 @@ export const Dashboard = compose(
   align-items: center;
   flex-direction: column;
   flex: 1;
+  width: 100%;
 
   > div {
     width: 100%;

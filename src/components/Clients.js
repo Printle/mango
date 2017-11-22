@@ -1,7 +1,9 @@
 import { DurationInput, extractParts } from './DurationInput'
 
+import { Button } from './Button'
 import { Link } from 'react-router-dom'
 import React from 'react'
+import { SearchInput } from './SearchInput'
 import { Table } from './Table'
 import { compose } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -136,10 +138,10 @@ class RawClient extends React.Component {
             />
           </Item>
         </Info>
-        <button onClick={edit ? this.save : this.edit}>
+        <Button onClick={edit ? this.save : this.edit}>
           {edit ? 'Gem' : 'Rediger'}
-        </button>
-        {edit && <button onClick={deleteClient}>Slet</button>}
+        </Button>
+        {edit && <Button onClick={deleteClient}>Slet</Button>}
       </ClientContainer>
     )
   }
@@ -206,10 +208,9 @@ export class Clients extends React.Component {
     return (
       <ClientsContainer>
         <Link to="/clients/create">Tilføj Kunde</Link>
-        <input
-          onChange={e => this.setState({ search: e.target.value })}
+        <SearchInput
+          onChange={search => this.setState({ search })}
           placeholder="Søg på Kunde"
-          type="search"
         />
         <ClientsGrid search={search} />
       </ClientsContainer>

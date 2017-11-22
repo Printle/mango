@@ -1,3 +1,4 @@
+import { Button } from './Button'
 import React from 'react'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
@@ -8,10 +9,13 @@ const Form = styled.form`
   padding: 1em;
   box-shadow: 0em 0.3em 0.3em 0em rgba(0, 0, 0, 0.2);
 `
-const InputGroup = styled.div`padding: 1em 0;`
-const Label = styled.label`display: block;`
+const InputGroup = styled.div`
+  padding: 1em 0;
+`
+const Label = styled.label`
+  display: block;
+`
 const Input = styled.input``
-const Button = styled.button``
 
 export const AddPrinter = graphql(gql`
   mutation addPrinter($name: String!) {

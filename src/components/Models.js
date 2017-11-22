@@ -1,7 +1,9 @@
 import { DurationInput, extractParts } from './DurationInput'
 
+import { Button } from './Button'
 import { Link } from 'react-router-dom'
 import React from 'react'
+import { SearchInput } from './SearchInput'
 import { Table } from './Table'
 import { compose } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -151,7 +153,7 @@ class RawModel extends React.Component {
                   })}
                 </tbody>
               </Table>
-              <button onClick={this.hideAddPrinters}>Færdig</button>
+              <Button onClick={this.hideAddPrinters}>Færdig</Button>
             </div>
           ) : (
             <div>
@@ -177,7 +179,7 @@ class RawModel extends React.Component {
                   </tbody>
                 </Table>
               )}
-              <button onClick={this.showAddPrinters}>Rediger</button>
+              <Button onClick={this.showAddPrinters}>Rediger</Button>
             </div>
           )}
         </div>
@@ -240,10 +242,9 @@ class RawModels extends React.Component {
     return (
       <div className={className}>
         <Link to="/models/create">Tilføj model</Link>
-        <input
-          onChange={e => this.setState({ search: e.target.value })}
+        <SearchInput
+          onChange={search => this.setState({ search })}
           placeholder="Søg på modeller"
-          type="search"
         />
         <ModelsGrid search={search} />
       </div>
