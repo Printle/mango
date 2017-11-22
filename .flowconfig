@@ -1,6 +1,9 @@
 [ignore]
+.*/server
+.*/node_modules/react-apollo/
 
 [include]
+./src
 
 [libs]
 

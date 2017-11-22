@@ -1,3 +1,7 @@
+// @flow
+
+import * as rdom from 'react-dom'
+
 import React from 'react'
 import styled from 'styled-components'
 
@@ -7,15 +11,28 @@ export const MINUTES = SECONDS * 60
 export const HOURS = MINUTES * 60
 export const DAYS = HOURS * 24
 
-export const extractParts = x => ({
+export const extractParts = (x: number) => ({
   days: Math.floor(x / DAYS),
   hours: Math.floor((x % DAYS) / HOURS),
   minutes: Math.floor((x % HOURS) / MINUTES),
   seconds: Math.floor((x % MINUTES) / SECONDS),
 })
 
-class RawDurationInput extends React.Component {
-  constructor(props) {
+type State = {
+  days: number,
+  hours: number,
+  minutes: number,
+  seconds: number,
+}
+
+type Props = {
+  defaultValue?: number,
+  name: string,
+  onChange: (ms: number) => void,
+}
+
+export class DurationInput extends React.Component<Props, State> {
+  constructor(props: Props) {
     super()
 
     this.state = props.defaultValue
@@ -28,7 +45,7 @@ class RawDurationInput extends React.Component {
         }
   }
 
-  update = field => e => {
+  update = (field: $Keys<State>) => (e: any) => {
     this.setState(
       { [field]: parseInt(e.target.value, 10) },
       () => this.props.onChange && this.props.onChange(this.durationInMillis()),
@@ -42,11 +59,11 @@ class RawDurationInput extends React.Component {
     this.state.seconds * SECONDS
 
   render() {
-    const { className, name } = this.props
+    const { name } = this.props
     const { days, hours, minutes, seconds } = this.state
 
     return (
-      <div className={className}>
+      <DurationDiv>
         <div>
           <span>D</span>
           <Input
@@ -84,7 +101,7 @@ class RawDurationInput extends React.Component {
           />
         </div>
         <input type="hidden" name={name} value={this.durationInMillis()} />
-      </div>
+      </DurationDiv>
     )
   }
 }
@@ -107,7 +124,7 @@ const Input = styled.input`
   border-radius: 4px;
 `
 
-export const DurationInput = styled(RawDurationInput)`
+const DurationDiv = styled.div`
   display: flex;
   > div {
     display: flex;

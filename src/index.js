@@ -1,6 +1,8 @@
-import 'tachyons'
 import './index.css'
 import 'milligram'
+import 'tachyons'
+
+import * as React from 'react'
 
 import { Route, BrowserRouter as Router } from 'react-router-dom'
 
@@ -17,18 +19,38 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { Jobs } from './components/Jobs'
 import { Models } from './components/Models'
 import { Printers } from './components/Printers'
-import React from 'react'
 import { SimpleNav } from './components/SimpleNav'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
 import { render } from 'react-dom'
+import { split } from 'apollo-link'
 import styled from 'styled-components'
 
+const serviceId = process.env.REACT_APP_SERVICE_ID
+
 const httpLink = new HttpLink({
-  uri: 'https://api.graph.cool/simple/v1/cj9h6x1cp37ze0111erl6ygwi',
+  uri: `https://api.graph.cool/simple/v1/${serviceId}`,
 })
 
+const wsLink = new WebSocketLink({
+  uri: `wss://subscriptions.graph.cool/v1/${serviceId}`,
+  options: {
+    reconnect: true,
+  },
+})
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query)
+    return kind === 'OperationDefinition' && operation === 'subscription'
+  },
+  wsLink,
+  httpLink,
+)
+
 const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache(),
+  link,
+  cache: new InMemoryCache().restore(window.__APOLLO_STATE__),
 })
 
 const Page = styled.div`

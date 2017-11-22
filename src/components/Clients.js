@@ -30,12 +30,12 @@ const updateClientMutation = gql`
   }
 `
 
-const RawInfo = ({ edit, children }) => (
-  <table>
+const Info = ({ edit, children }) => (
+  <InfoTable>
     <tbody>{children}</tbody>
-  </table>
+  </InfoTable>
 )
-const Info = styled(RawInfo)``
+const InfoTable = styled.table``
 const Item = styled.tr``
 const Title = styled.td``
 const Gray = styled.span`
@@ -43,8 +43,8 @@ const Gray = styled.span`
   font-style: italic;
   opacity: 0.4;
 `
-const RawValue = ({ type, name, value, edit, onChange }) => (
-  <td>
+const Value = ({ type, name, value, edit, onChange }) => (
+  <ValueCell>
     {edit ? (
       <input
         type={type}
@@ -55,9 +55,9 @@ const RawValue = ({ type, name, value, edit, onChange }) => (
     ) : (
       value || <Gray>Tom</Gray>
     )}
-  </td>
+  </ValueCell>
 )
-const Value = styled(RawValue)`
+const ValueCell = styled.td`
   > input {
     margin: 0;
   }
@@ -79,13 +79,19 @@ class RawClient extends React.Component {
   }
 
   render() {
-    const { className, client, updateClient, onChange } = this.props
+    const {
+      className,
+      client,
+      updateClient,
+      onChange,
+      deleteClient,
+    } = this.props
     const { edit } = this.state
 
     const { days, hours, minutes, seconds } = extractParts(client.duration)
 
     return (
-      <div className={className}>
+      <ClientContainer>
         <h2>{client.name}</h2>
         <p>Jobs: {client.jobs.length}</p>
         <Info>
@@ -133,24 +139,33 @@ class RawClient extends React.Component {
         <button onClick={edit ? this.save : this.edit}>
           {edit ? 'Gem' : 'Rediger'}
         </button>
-      </div>
+        {edit && <button onClick={deleteClient}>Slet</button>}
+      </ClientContainer>
     )
   }
 }
 
+const ClientFragment = gql`
+  fragment ClientFragment on Client {
+    id
+    name
+    jobs {
+      id
+    }
+    tel
+    email
+    contactPerson
+    address
+  }
+`
+
 const ClientsGrid = graphql(
   gql`
+    ${ClientFragment}
+
     query clients($search: String!) {
-      allClients(filter: { name_contains: $search }) {
-        id
-        name
-        jobs {
-          id
-        }
-        tel
-        email
-        contactPerson
-        address
+      allClients(filter: { name_contains: $search, deleted: false }) {
+        ...ClientFragment
       }
     }
   `,
@@ -171,6 +186,7 @@ const ClientsGrid = graphql(
           key={client.id}
           client={client}
           printers={data.allPrinters}
+          deleteClient={() => {}}
           onChange={() => {
             data.refetch()
           }}
@@ -180,7 +196,7 @@ const ClientsGrid = graphql(
   </div>
 ))
 
-class RawClients extends React.Component {
+export class Clients extends React.Component {
   state = { search: '' }
 
   render() {
@@ -188,7 +204,7 @@ class RawClients extends React.Component {
     const { search } = this.state
 
     return (
-      <div className={className}>
+      <ClientsContainer>
         <Link to="/clients/create">Tilføj Kunde</Link>
         <input
           onChange={e => this.setState({ search: e.target.value })}
@@ -196,22 +212,24 @@ class RawClients extends React.Component {
           type="search"
         />
         <ClientsGrid search={search} />
-      </div>
+      </ClientsContainer>
     )
   }
 }
 
-const Client = compose(
-  graphql(updateClientMutation, { name: 'updateClient' }),
-)(styled(RawClient)`
+const ClientContainer = styled.div`
   background: white;
   padding: 1em;
   margin: 1em;
   box-shadow: 0 0.2em 0.5em 0 rgba(0, 0, 0, 0.2);
   width: 22em;
-`)
+`
 
-export const Clients = styled(RawClients)`
+const Client = graphql(updateClientMutation, { name: 'updateClient' })(
+  RawClient,
+)
+
+export const ClientsContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;

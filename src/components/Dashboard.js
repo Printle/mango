@@ -6,30 +6,47 @@ import gql from 'graphql-tag'
 import moment from 'moment'
 import styled from 'styled-components'
 
-const PrintersQuery = gql`
-  query dashboard {
-    allPrinters {
+const POLL_INTERVAL = 1000
+
+const DashboardJobFragment = gql`
+  fragment DashboardJob on PrintJob {
+    id
+    createdAt
+    quantity
+    scheduledTime
+    status
+    model {
+      id
+      duration
+      name
+      supportedPrinters {
+        id
+      }
+    }
+    client {
       id
       name
-      jobs {
-        id
-        createdAt
-        quantity
-        scheduledTime
-        status
-        model {
-          id
-          duration
-          name
-          supportedPrinters {
-            id
-          }
-        }
-        client {
-          id
-          name
-        }
-      }
+    }
+  }
+`
+const DashboardPrinterFragment = gql`
+  ${DashboardJobFragment}
+
+  fragment DashboardPrinter on Printer {
+    id
+    name
+    jobs {
+      ...DashboardJob
+    }
+  }
+`
+
+const PrintersQuery = gql`
+  ${DashboardPrinterFragment}
+
+  query dashboard {
+    allPrinters {
+      ...DashboardPrinter
     }
   }
 `
@@ -40,12 +57,14 @@ const updateJobMutation = gql`
     $printerId: ID
     $scheduledTime: DateTime
     $status: PrintJobStatus
+    $quantity: Int
   ) {
     updatePrintJob(
       id: $id
       printerId: $printerId
       scheduledTime: $scheduledTime
       status: $status
+      quantity: $quantity
     ) {
       id
     }
@@ -61,19 +80,19 @@ class UnstyledPrinters extends React.Component {
 
   allJobs = () => this.allPrinters().reduce((a, b) => a.concat(b.jobs), [])
 
-  groups = () =>
+  printers = () =>
     this.allPrinters().map(printer => ({
       id: printer.id,
       title: printer.name,
     }))
 
-  items = () =>
+  jobs = () =>
     this.allPrinters()
       .map(printer =>
         printer.jobs.map(job => ({
           id: job.id,
           group: printer.id,
-          title: `${job.model.name} - ${job.status}`,
+          title: `${job.model.name} - ${job.status} - ${job.quantity}`,
           canMove: job.status == 'WAITING',
           start_time: moment(job.scheduledTime || job.createdAt),
           end_time: moment(job.scheduledTime || job.createdAt).add(
@@ -99,13 +118,15 @@ class UnstyledPrinters extends React.Component {
     const variables = {
       id,
       scheduledTime: new Date(start).toISOString(),
-      printerId: this.groups()[gi].id,
+      printerId: this.printers()[gi].id,
     }
 
     await this.props.updateJob({ variables })
 
-    this.props.printers.refetch()
+    this.onChange()
   }
+
+  onChange = () => this.props.printers.refetch()
 
   selectJob = selectedJobId => this.setState({ selectedJobId })
 
@@ -120,8 +141,8 @@ class UnstyledPrinters extends React.Component {
         ) : (
           <div>
             <Timeline
-              groups={this.groups()}
-              items={this.items()}
+              groups={this.printers()}
+              items={this.jobs()}
               defaultTimeStart={moment().add(-12, 'hour')}
               defaultTimeEnd={moment().add(12, 'hour')}
               onItemMove={this.updateJob}
@@ -129,7 +150,9 @@ class UnstyledPrinters extends React.Component {
               onItemSelect={this.selectJob}
               itemHeightRatio={1}
             />
-            {selectedJobId && <SelectedJob id={selectedJobId} />}
+            {selectedJobId && (
+              <SelectedJob onChange={this.onChange} id={selectedJobId} />
+            )}
           </div>
         )}
       </div>
@@ -155,7 +178,7 @@ const SelectedJob = compose(
     {
       name: 'job',
       options: {
-        pollInterval: 1000,
+        pollInterval: POLL_INTERVAL,
       },
     },
   ),
@@ -183,8 +206,8 @@ const SelectedJob = compose(
       name: 'updateJobQuantity',
     },
   ),
-)(({ job, updateJobStatus, updateJobQuantity }) => {
-  if (job.loading) return <h3>Loading</h3>
+)(({ job, updateJobStatus, updateJobQuantity, onChange }) => {
+  if (job.loading || !job.PrintJob) return <h3>Loading</h3>
 
   const { id, status, quantity } = job.PrintJob
 
@@ -197,6 +220,7 @@ const SelectedJob = compose(
           const variables = { id, status: e.target.value }
           await updateJobStatus({ variables })
           job.refetch()
+          onChange()
         }}
       >
         {['WAITING', 'LOCKED', 'PRINTING', 'FINISHED', 'CANCELLED'].map(s => (
@@ -206,14 +230,16 @@ const SelectedJob = compose(
         ))}
       </select>
       <input
+        key={id}
         min={1}
         max={10}
         type="number"
         defaultValue={quantity}
         onChange={async e => {
           const variables = { id, quantity: parseInt(e.target.value, 10) }
-          await updateJobQuantity({ variables })
+          let result = await updateJobQuantity({ variables })
           job.refetch()
+          onChange()
         }}
       />
     </div>
@@ -222,7 +248,12 @@ const SelectedJob = compose(
 
 export const Dashboard = compose(
   graphql(updateJobMutation, { name: 'updateJob' }),
-  graphql(PrintersQuery, { name: 'printers', options: { pollInterval: 1000 } }),
+  graphql(PrintersQuery, {
+    name: 'printers',
+    options: {
+      pollInterval: POLL_INTERVAL,
+    },
+  }),
 )(styled(UnstyledPrinters)`
   display: flex;
   justify-content: center;
