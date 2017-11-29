@@ -112,7 +112,7 @@ class UnstyledPrinters extends React.Component {
           },
         })),
       )
-      .reduce((a, b) => a.concat(b))
+      .reduce((a, b) => a.concat(b), [])
 
   updateJob = async (id, start, gi) => {
     const variables = {
