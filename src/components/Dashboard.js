@@ -93,7 +93,7 @@ class UnstyledPrinters extends React.Component {
           id: job.id,
           group: printer.id,
           title: `${job.model.name} - ${job.status} - ${job.quantity}`,
-          canMove: job.status == 'WAITING',
+          canMove: job.status === 'WAITING',
           start_time: moment(job.scheduledTime || job.createdAt),
           end_time: moment(job.scheduledTime || job.createdAt).add(
             job.model.duration * job.quantity,
@@ -237,7 +237,7 @@ const SelectedJob = compose(
         defaultValue={quantity}
         onChange={async e => {
           const variables = { id, quantity: parseInt(e.target.value, 10) }
-          let result = await updateJobQuantity({ variables })
+          await updateJobQuantity({ variables })
           job.refetch()
           onChange()
         }}

@@ -1,6 +1,11 @@
+// @flow
+
+import * as React from 'react'
+
 import { Button } from './Button'
-import React from 'react'
+import { Redirect } from 'react-router-dom'
 import gql from 'graphql-tag'
+// $FlowFixMe
 import { graphql } from 'react-apollo'
 import styled from 'styled-components'
 
@@ -17,13 +22,13 @@ const Label = styled.label`
 `
 const Input = styled.input``
 
-export const AddPrinter = graphql(gql`
+const AddPrinterForm = graphql(gql`
   mutation addPrinter($name: String!) {
     createPrinter(name: $name) {
       id
     }
   }
-`)(({ mutate }) => (
+`)(({ mutate, onAdd }) => (
   <Form
     onSubmit={async e => {
       e.preventDefault()
@@ -32,7 +37,7 @@ export const AddPrinter = graphql(gql`
 
       const name = e.target.name.value
       await mutate({ variables: { name } })
-      window.location.pathname = '/printers'
+      onAdd()
     }}
   >
     <h1>Opret Printer</h1>
@@ -45,3 +50,26 @@ export const AddPrinter = graphql(gql`
     </InputGroup>
   </Form>
 ))
+
+export class AddPrinter extends React.Component<
+  {},
+  {
+    redirect: false | string,
+  },
+> {
+  state = {
+    redirect: false,
+  }
+
+  render() {
+    return this.state.redirect ? (
+      <Redirect to={this.state.redirect} />
+    ) : (
+      <AddPrinterForm
+        onAdd={() => {
+          this.setState({ redirect: '/printers' })
+        }}
+      />
+    )
+  }
+}

@@ -6,12 +6,15 @@ export const Button = ({
   children,
   primary,
   onClick,
+  type,
 }: {
   children?: React.Node,
-  primary: boolean,
-  onClick: () => void,
+  primary?: boolean,
+  onClick?: () => void,
+  type?: 'submit',
 }) => (
   <button
+    type={type}
     className={`btn btn-${primary ? 'primary' : 'default'}`}
     onClick={onClick}
   >

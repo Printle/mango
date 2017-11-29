@@ -1,11 +1,7 @@
-import { DurationInput, extractParts } from './DurationInput'
-
 import { Button } from './Button'
 import { Link } from 'react-router-dom'
 import React from 'react'
 import { SearchInput } from './SearchInput'
-import { Table } from './Table'
-import { compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 import styled from 'styled-components'
@@ -81,16 +77,8 @@ class RawClient extends React.Component {
   }
 
   render() {
-    const {
-      className,
-      client,
-      updateClient,
-      onChange,
-      deleteClient,
-    } = this.props
+    const { client, deleteClient } = this.props
     const { edit } = this.state
-
-    const { days, hours, minutes, seconds } = extractParts(client.duration)
 
     return (
       <ClientContainer>
@@ -202,7 +190,6 @@ export class Clients extends React.Component {
   state = { search: '' }
 
   render() {
-    const { className } = this.props
     const { search } = this.state
 
     return (

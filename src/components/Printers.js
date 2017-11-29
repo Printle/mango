@@ -4,14 +4,21 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 import styled from 'styled-components'
 
-const UnstyledPrinters = graphql(gql`
-  query printers {
-    allPrinters {
-      id
-      name
+const UnstyledPrinters = graphql(
+  gql`
+    query printers {
+      allPrinters {
+        id
+        name
+      }
     }
-  }
-`)(
+  `,
+  {
+    options: {
+      pollInterval: 1000,
+    },
+  },
+)(
   props =>
     !props.data || props.data.loading ? null : (
       <div className={props.className}>

@@ -1,6 +1,7 @@
 import { compose, graphql } from 'react-apollo'
 
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
@@ -44,17 +45,21 @@ const Form = styled.form`
   padding: 1em;
   box-shadow: 0em 0.3em 0.3em 0em rgba(0, 0, 0, 0.2);
 `
-const InputGroup = styled.div`padding: 1em 0;`
-const Label = styled.label`display: block;`
+const InputGroup = styled.div`
+  padding: 1em 0;
+`
+const Label = styled.label`
+  display: block;
+`
 const Select = styled.select``
 const Option = styled.option``
 const Button = styled.button``
 
-export const CreateJob = compose(
+const CreateJobForm = compose(
   graphql(createJobMutation, { name: 'createJob' }),
   graphql(createJobQuery, { name: 'query' }),
 )(props => {
-  const { query, createJob } = props
+  const { query, createJob, onCreate } = props
 
   return (
     <Form
@@ -72,7 +77,7 @@ export const CreateJob = compose(
           printerId: printer,
         }
         await createJob({ variables })
-        window.location.pathname = '/jobs'
+        onCreate()
       }}
     >
       <h1>Opret Print Job</h1>
@@ -122,3 +127,26 @@ export const CreateJob = compose(
     </Form>
   )
 })
+
+export class CreateJob extends React.Component<
+  {},
+  {
+    redirect: false | string,
+  },
+> {
+  state = {
+    redirect: false,
+  }
+
+  render() {
+    return this.state.redirect ? (
+      <Redirect to={this.state.redirect} />
+    ) : (
+      <CreateJobForm
+        onCreate={() => {
+          this.setState({ redirect: '/jobs' })
+        }}
+      />
+    )
+  }
+}

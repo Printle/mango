@@ -1,7 +1,5 @@
 // @flow
 
-import * as rdom from 'react-dom'
-
 import React from 'react'
 import styled from 'styled-components'
 

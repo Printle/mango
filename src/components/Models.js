@@ -157,7 +157,7 @@ class RawModel extends React.Component {
             </div>
           ) : (
             <div>
-              {model.supportedPrinters.length == 0 ? (
+              {model.supportedPrinters.length === 0 ? (
                 <p>Ingen...</p>
               ) : (
                 <Table>

@@ -41,9 +41,13 @@ const JobsQuery = gql`
   }
 `
 
+const Loading = () => <h2>Loading...</h2>
+
 export const Jobs = graphql(JobsQuery)(
   props =>
-    props.data.loading ? null : (
+    props.data.loading || !props.data.allPrintJobs ? (
+      <Loading />
+    ) : (
       <JobsContainer>
         <Table>
           <thead>
@@ -58,7 +62,9 @@ export const Jobs = graphql(JobsQuery)(
             </tr>
           </thead>
           <tbody>
-            {props.data.allPrintJobs.map(job => <JobRow job={job} />)}
+            {props.data.allPrintJobs.map((job: JobPageJobFragment) => (
+              <JobRow key={job.id} job={job} />
+            ))}
           </tbody>
         </Table>
         <Link to="/jobs/create">Tilføj job</Link>
