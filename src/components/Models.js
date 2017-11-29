@@ -1,12 +1,16 @@
+// @flow
+
+import * as React from 'react'
+
 import { DurationInput, extractParts } from './DurationInput'
 
 import { Button } from './Button'
 import { Link } from 'react-router-dom'
-import React from 'react'
 import { SearchInput } from './SearchInput'
 import { Table } from './Table'
 import { compose } from 'react-apollo'
 import gql from 'graphql-tag'
+// $FlowFixMe
 import { graphql } from 'react-apollo'
 import styled from 'styled-components'
 
@@ -54,7 +58,15 @@ const removePrinterSupportMutation = gql`
   }
 `
 
-class RawModel extends React.Component {
+const RawModelContainer = styled.div`
+  background: white;
+  padding: 1em;
+  margin: 1em;
+  box-shadow: 0 0.2em 0.5em 0 rgba(0, 0, 0, 0.2);
+  width: 22em;
+`
+
+class RawModel extends React.Component<any, { showAddPrinters: boolean }> {
   state = {
     showAddPrinters: false,
   }
@@ -64,7 +76,6 @@ class RawModel extends React.Component {
 
   render() {
     const {
-      className,
       model,
       printers,
       removePrinterSupport,
@@ -77,7 +88,7 @@ class RawModel extends React.Component {
     const { days, hours, minutes, seconds } = extractParts(model.duration)
 
     return (
-      <div className={className}>
+      <RawModelContainer>
         <h2>{model.name}</h2>
         <div>
           Print Tid:{' '}
@@ -183,7 +194,7 @@ class RawModel extends React.Component {
             </div>
           )}
         </div>
-      </div>
+      </RawModelContainer>
     )
   }
 }
@@ -232,22 +243,21 @@ const ModelsGrid = graphql(
   </div>
 ))
 
-class RawModels extends React.Component {
+export class Models extends React.Component<{}, { search: string }> {
   state = { search: '' }
 
   render() {
-    const { className } = this.props
     const { search } = this.state
 
     return (
-      <div className={className}>
+      <ModelsContainer>
         <Link to="/models/create">Tilføj model</Link>
         <SearchInput
           onChange={search => this.setState({ search })}
           placeholder="Søg på modeller"
         />
         <ModelsGrid search={search} />
-      </div>
+      </ModelsContainer>
     )
   }
 }
@@ -256,15 +266,9 @@ const Model = compose(
   graphql(updateModelMutation, { name: 'updateModel' }),
   graphql(removePrinterSupportMutation, { name: 'removePrinterSupport' }),
   graphql(supportPrinterMutation, { name: 'supportPrinter' }),
-)(styled(RawModel)`
-  background: white;
-  padding: 1em;
-  margin: 1em;
-  box-shadow: 0 0.2em 0.5em 0 rgba(0, 0, 0, 0.2);
-  width: 22em;
-`)
+)(RawModel)
 
-export const Models = styled(RawModels)`
+const ModelsContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;

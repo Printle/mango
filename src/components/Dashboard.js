@@ -1,6 +1,17 @@
-import { compose, graphql } from 'react-apollo'
+// @flow
+import * as React from 'react'
 
-import React from 'react'
+// $FlowFixMe
+import { compose, graphql } from 'react-apollo'
+import type {
+  dashboardQuery,
+  jobQuery,
+  updateJobMutation,
+  updateJobMutationVariables,
+  updatePrintJobQuantityMutationVariables,
+  updatePrintJobStatusMutationVariables,
+} from '../gql'
+
 import Timeline from 'react-calendar-timeline'
 import gql from 'graphql-tag'
 import moment from 'moment'
@@ -51,7 +62,7 @@ const PrintersQuery = gql`
   }
 `
 
-const updateJobMutation = gql`
+const UPDATE_JOB_MUTATION = gql`
   mutation updateJob(
     $id: ID!
     $printerId: ID
@@ -71,7 +82,35 @@ const updateJobMutation = gql`
   }
 `
 
-class UnstyledPrinters extends React.Component {
+const PrintersContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+
+  > div {
+    width: 100%;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .react-calendar-timeline .rct-items .rct-item.not-printalbe {
+    background: red;
+  }
+`
+
+class Printers extends React.Component<
+  {
+    printers: Query<dashboardQuery>,
+    updateJob: (args: { variables: updateJobMutationVariables }) => Promise<
+      void,
+    >,
+  },
+  { selectedJobId: void | string },
+> {
   state = {
     selectedJobId: void 0,
   }
@@ -89,7 +128,7 @@ class UnstyledPrinters extends React.Component {
   jobs = () =>
     this.allPrinters()
       .map(printer =>
-        printer.jobs.map(job => ({
+        (printer.jobs || []).map(job => ({
           id: job.id,
           group: printer.id,
           title: `${job.model.name} - ${job.status} - ${job.quantity}`,
@@ -99,14 +138,14 @@ class UnstyledPrinters extends React.Component {
             job.model.duration * job.quantity,
           ),
           className:
-            job.model.supportedPrinters
+            (job.model.supportedPrinters || [])
               .map(({ id }) => id)
               .indexOf(printer.id) > -1
               ? ''
               : 'not-printalbe',
           itemProps: {
             isPrintableOnCurrentPrinter:
-              job.model.supportedPrinters
+              (job.model.supportedPrinters || [])
                 .map(({ id }) => id)
                 .indexOf(printer.id) > -1,
           },
@@ -131,11 +170,11 @@ class UnstyledPrinters extends React.Component {
   selectJob = selectedJobId => this.setState({ selectedJobId })
 
   render() {
-    const { className, printers } = this.props
+    const { printers } = this.props
     const { selectedJobId } = this.state
 
     return (
-      <div className={className}>
+      <PrintersContainer>
         {printers.loading ? (
           <h2>Loading dashboard... </h2>
         ) : (
@@ -155,10 +194,12 @@ class UnstyledPrinters extends React.Component {
             )}
           </div>
         )}
-      </div>
+      </PrintersContainer>
     )
   }
 }
+
+type Query<T> = T & { loading: boolean, refetch: () => void }
 
 const SelectedJob = compose(
   graphql(
@@ -206,70 +247,68 @@ const SelectedJob = compose(
       name: 'updateJobQuantity',
     },
   ),
-)(({ job, updateJobStatus, updateJobQuantity, onChange }) => {
-  if (job.loading || !job.PrintJob) return <h3>Loading</h3>
+)(
+  ({
+    job,
+    updateJobStatus,
+    updateJobQuantity,
+    onChange,
+  }: {
+    job: Query<jobQuery>,
+    onChange: () => void,
+    updateJobStatus: (args: {
+      variables: updatePrintJobStatusMutationVariables,
+    }) => Promise<void>,
+    updateJobQuantity: (args: {
+      variables: updatePrintJobQuantityMutationVariables,
+    }) => Promise<void>,
+  }) => {
+    if (job.loading || !job.PrintJob) return <h3>Loading</h3>
 
-  const { id, status, quantity } = job.PrintJob
+    const { id, status, quantity } = job.PrintJob
 
-  return (
-    <div>
-      <label>Status</label>
-      <select
-        value={status}
-        onChange={async e => {
-          const variables = { id, status: e.target.value }
-          await updateJobStatus({ variables })
-          job.refetch()
-          onChange()
-        }}
-      >
-        {['WAITING', 'LOCKED', 'PRINTING', 'FINISHED', 'CANCELLED'].map(s => (
-          <option value={s} key={s}>
-            {s}
-          </option>
-        ))}
-      </select>
-      <input
-        key={id}
-        min={1}
-        max={10}
-        type="number"
-        defaultValue={quantity}
-        onChange={async e => {
-          const variables = { id, quantity: parseInt(e.target.value, 10) }
-          await updateJobQuantity({ variables })
-          job.refetch()
-          onChange()
-        }}
-      />
-    </div>
-  )
-})
+    return (
+      <div>
+        <label>Status</label>
+        <select
+          value={status}
+          onChange={async e => {
+            const variables = { id, status: e.target.value }
+            await updateJobStatus({ variables })
+            job.refetch()
+            onChange()
+          }}
+        >
+          {['WAITING', 'LOCKED', 'PRINTING', 'FINISHED', 'CANCELLED'].map(s => (
+            <option value={s} key={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+        <input
+          key={id}
+          min={1}
+          max={10}
+          type="number"
+          defaultValue={quantity}
+          onChange={async e => {
+            const variables = { id, quantity: parseInt(e.target.value, 10) }
+            await updateJobQuantity({ variables })
+            job.refetch()
+            onChange()
+          }}
+        />
+      </div>
+    )
+  },
+)
 
 export const Dashboard = compose(
-  graphql(updateJobMutation, { name: 'updateJob' }),
+  graphql(UPDATE_JOB_MUTATION, { name: 'updateJob' }),
   graphql(PrintersQuery, {
     name: 'printers',
     options: {
       pollInterval: POLL_INTERVAL,
     },
   }),
-)(styled(UnstyledPrinters)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  flex: 1;
-  width: 100%;
-
-  > div {
-    width: 100%;
-    max-width: 100vw;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .react-calendar-timeline .rct-items .rct-item.not-printalbe {
-    background: red;
-  }
-`)
+)(Printers)

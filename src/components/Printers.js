@@ -1,10 +1,13 @@
+// @flow
+import * as React from 'react'
+
 import { Link } from 'react-router-dom'
-import React from 'react'
 import gql from 'graphql-tag'
+// $FlowFixMe
 import { graphql } from 'react-apollo'
 import styled from 'styled-components'
 
-const UnstyledPrinters = graphql(
+export const Printers = graphql(
   gql`
     query printers {
       allPrinters {
@@ -21,16 +24,16 @@ const UnstyledPrinters = graphql(
 )(
   props =>
     !props.data || props.data.loading ? null : (
-      <div className={props.className}>
+      <PrintersContainer>
         {props.data.allPrinters.map(printer => (
           <div key={printer.id}>{printer.name}</div>
         ))}
         <Link to="/printers/add">Tilføj printer</Link>
-      </div>
+      </PrintersContainer>
     ),
 )
 
-export const Printers = styled(UnstyledPrinters)`
+export const PrintersContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -25,8 +25,8 @@ type State = {
 
 type Props = {
   defaultValue?: number,
-  name: string,
-  onChange: (ms: number) => void,
+  name?: string,
+  onChange: (ms: number) => any,
 }
 
 export class DurationInput extends React.Component<Props, State> {

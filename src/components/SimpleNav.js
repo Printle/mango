@@ -2,8 +2,8 @@ import { NavLink } from 'react-router-dom'
 import React from 'react'
 import styled from 'styled-components'
 
-const RawSimpleNav = ({ className }) => (
-  <nav className={className}>
+export const SimpleNav = ({ className }) => (
+  <StyledNav>
     <NavLink exact to="/">
       Hjem
     </NavLink>
@@ -11,10 +11,10 @@ const RawSimpleNav = ({ className }) => (
     <NavLink to="/printers">Printere</NavLink>
     <NavLink to="/models">Modeller</NavLink>
     <NavLink to="/clients">Kunder</NavLink>
-  </nav>
+  </StyledNav>
 )
 
-export const SimpleNav = styled(RawSimpleNav)`
+export const StyledNav = styled.nav`
   padding: 1em;
   a {
     padding: 1em;
